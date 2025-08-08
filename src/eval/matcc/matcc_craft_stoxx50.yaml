@@ -1,0 +1,78 @@
+qlib_init:
+    provider_uri: "../dataset/qlib_data/eu_craft_data"
+    region: eu
+market: &market stoxx50
+benchmark: &benchmark "^STOXX50E"
+dataset_name: &dataset_name craft_stoxx50
+data_handler_config: &data_handler_config
+    start_time: 2020-04-01
+    end_time: 2024-12-31
+    fit_start_time: 2020-04-01
+    fit_end_time: 2023-12-31
+    instruments: *market
+    infer_processors:
+        - class: RobustZScoreNorm
+          kwargs:
+              fields_group: feature
+              clip_outlier: true
+        - class: Fillna
+          kwargs:
+              fields_group: feature
+    learn_processors:
+        - class: DropnaLabel
+        - class: CSRankNorm
+          kwargs:
+              fields_group: label
+    label: ["Ref($close, -5) / Ref($close, -1) - 1"] 
+market_data_handler_config: &market_data_handler_config
+    start_time: 2020-04-01
+    end_time: 2024-12-31
+    fit_start_time: 2020-04-01
+    fit_end_time: 2023-12-31
+    instruments: *market
+    market_index: *benchmark
+    infer_processors:
+        - class: RobustZScoreNorm
+          kwargs:
+              fields_group: feature
+              clip_outlier: true
+        - class: Fillna
+          kwargs:
+              fields_group: feature
+task:
+    model:
+        class: MASTERModel
+        module_path: qlib.contrib.model.pytorch_matcc_ts
+        kwargs:
+            seed: 0
+            n_epochs: 40
+            lr: 0.000008
+            train_stop_loss_thred: 0.95
+            benchmark: *benchmark
+            save_prefix: *dataset_name
+    dataset:
+        class: MASTERTSDatasetH
+        module_path: qlib.contrib.data.dataset
+        kwargs:
+            handler:
+                class: Alpha158
+                module_path: qlib.contrib.data.handler
+                kwargs: *data_handler_config
+            segments:
+                train: [2020-04-01, 2023-12-31]
+                valid: [2024-01-01, 2024-03-31]
+                test: [2024-04-01, 2024-12-19]
+            step_len: 8
+            market_data_handler_config: *market_data_handler_config
+    record: 
+        - class: SignalRecord
+          module_path: qlib.workflow.record_temp
+          kwargs: 
+            model: <MODEL>
+            dataset: <DATASET>
+        - class: SignalAccMccRecord
+          module_path: qlib.contrib.workflow.record_temp
+          kwargs: 
+            model: <MODEL>
+            dataset: <DATASET>
+
