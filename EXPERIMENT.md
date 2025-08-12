@@ -42,9 +42,9 @@
 - ff = 256
 - cwtoken = True
 - cwstock = False
-- start: 2004-01-01
-- valid: 2024-01-01
-- test: 2024-04-01
+- start: 2020-01-01
+- valid: 2023-07-01
+- test: 2024-07-31
 - end: 2024-12-31
 
 # SP500
@@ -74,7 +74,7 @@
 - ff = 256
 - cwtoken = True
 - cwstock = True
-- start: 2020-01-01
-- valid: 2023-07-01
-- test: 2024-07-01
+- start: 2021-01-01
+- valid: 2022-10-01
+- test: 2023-11-01
 - end: 2024-12-31
