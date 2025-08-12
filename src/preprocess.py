@@ -81,9 +81,10 @@ def calculate_embedding_per_date(price_data: pd.DataFrame, date_pair: tuple) -> 
 
 def adjust_prices(price_data: pd.DataFrame, *, verbose=False) -> pd.DataFrame:
     """
-    가격과 거래량을 조정하고, adjusted_volume을 계산한 후
-    5일간의 가격과 거래량 움직임을 벡터화하여 c_1 ~ c_4, v_1 ~ v_4 컬럼을 생성합니다.
-    c_t 피처들에 대해 미래의 정보를 사용하지 않도록 date를 t+4로 이동합니다.
+    Adjust the price and volume, then calculate the adjusted_volume. 
+    After that, vectorize the price and volume movements over the past 5 days to create the columns 
+    c_1 to c_4 and v_1 to v_4. For the c_t features, make sure to shift the date to t+4 so that 
+    future information is not used.
     """
     if verbose:
         print(price_data)
