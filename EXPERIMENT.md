@@ -35,7 +35,7 @@
 - seed 0 ~ 4 
 - epoch = 50
 - alpha = 0.9
-- beta = 0
+- beta = 0.1
 - ntime = 1
 - nstock = 4
 - dmodel = 256
@@ -67,7 +67,7 @@
 - seed 0 ~ 4 
 - epoch = 50
 - alpha = 0.7
-- beta = 0
+- beta = 0.1
 - ntime = 1
 - nstock = 4
 - dmodel = 32
